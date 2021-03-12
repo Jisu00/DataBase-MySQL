@@ -10,7 +10,7 @@ MySQL로 배우는 데이터베이스 개론과 실습
 
 > * [CHAPTER 1](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%201.md) | 데이터베이스 시스템
 >
-> * CHAPTER 2 | 관계 데이터 모델
+> * [CHAPTER 2](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%202.md) | 관계 데이터 모델
 >
 > * CHAPTER 3 | SQL 기초
 >
