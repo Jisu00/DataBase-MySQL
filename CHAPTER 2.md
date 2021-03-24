@@ -122,6 +122,175 @@ ex) [마당 서점 DB](#마당-서점-데이터베이스)의 **주문 릴레이�
 
 주문 릴레이션에서는 고객번호와 도서번호가 중복되지만, 고객 릴레이션이나 도서 릴레이션에서는 각각이 key의 역할을 함. -> **고객 릴레이션이나 도서 릴레이션에서 참조**함.
 
+#### 키의 포함 관계
+
+![image](https://user-images.githubusercontent.com/62230430/112288067-53af0f80-8cd0-11eb-9387-41dac67630f9.png)
+
+<br/>
+
+### 무결성 제약조건
+
+#### 도메인 무결성 제약조건
+: **도메인 제약**(domain constraint)
+
+- 도메인에 해당하는 값만 삽입과 수정 가능
+
+#### 개체 무결성 제약조건
+: **기본키 제약**(primary key constraint)
+
+- 삽입 : 기본키 값이 같으면 삽입 금지
+- 수정 : 기본키 값이 같거나 NULL로 수정 금지
+- 삭제 : 특별한 확인 없이 즉시 수행
+
+#### 참조 무결성 제약조건
+: **외래키 제약**(foreign key constraint)
+
+- 삽입
+  - 부모 릴레이션 : 튜플 삽입 후 수행하면 정상 진행
+  - 자식 릴레이션 : 참조받는 테이블에 외래키 값이 없으므로 삽입 금지
+
+- 삭제
+  - 부모 릴레이션 : 다른 추가 작업 필요
+    1. 즉시 작업 중지
+    2. 자식 릴레이션의 관련 튜플 삭제
+    3. 초기에 설정된 다른 어떤 값으로 변경
+    4. NULL 값으로 
+  - 자식 릴레이션 : 바로 삭제 가능
+
+
+- 수정
+
+<br/>
+
+## 03. 관계대수
+
+### 관계대수
+
+#### 관계대수
+: relational algebra, 연산을 이용하여 질의하는 방법을 기술하는 언어
+
+#### 관계 대수 연산자
+
+![image](https://user-images.githubusercontent.com/62230430/112289107-5827f800-8cd1-11eb-8705-ef18136459e6.png)
+
+주로 셀렉션, 프로젝션, 카디전 프로덕트를 사용
+
+#### 관계대수 식
+
+![image](https://user-images.githubusercontent.com/62230430/112289289-8574a600-8cd1-11eb-8019-8c57ad091cc9.png)
+
+- 예시
+
+![image](https://user-images.githubusercontent.com/62230430/112289370-9ae9d000-8cd1-11eb-95d2-6e8c15750afd.png)
+
+
+<br/>
+
+### 셀렉션과 프로젝션
+
+#### 셀렉션 (selection)
+: 튜플을 추출하기 위한 연산, 튜플의 조건을 명시하고 그 조건에 만족하는 튜플 반환
+
+- 형식 : σ<조건>(R)
+
+#### 셀렉션의 확장
+
+- 형식 : σ<복합조건>(R)
+- 여러 개의 조건을 ∧(and), ∨ (or), ┑(not) 기호를 이용하여 복합조건을 표시 (ex. σ(가격<=8000 ∧ 도서번호 >=3) (도서))
+
+#### 프로젝션 (projection)
+: 릴레이션 속성을 추출하기 위한 연산, 단항 연산자
+
+- 형식 : π<속성리스트>(R)
+
+### 집합 연산
+
+합집합, 교집합, 차집합은 일반 수학 연산과 같기 때문에 skip
+
+#### 카티전 프로덕트 (cartesian product)
+: 두 릴레이션을 연결시켜 하나로 합칠 때 사용
+
+- 형식 : R x S
+- 결과 릴레이션의 차수 : 두 릴레이션 차수의 합
+- 결과 릴레이션의 카디날리티 : 두 릴레이션의 카디날리티의 곱
+
+- 질의 2-6 : 고객 릴레이션과 주문 릴레이션의 카티전 프로덕트를 구하시오.
+
+![image](https://user-images.githubusercontent.com/62230430/112290339-79d5af00-8cd2-11eb-8eb2-ba794240e118.png)
+
+- MySQL
+
+```mysql
+SELECT * from customer, orders;
+```
+
+<br/>
+
+### 조인
+
+- 형식 : R ⋈ cS = σc (R×S) (c는 조인 조건)
+- 조인 연산의 구분
+  - 기본 연산 : 세타조인, 동등조인, 자연조인
+  - 확장된 조인 연산 : 세미조인, 외부조인
+
+#### 세타조인 (theta join)
+: 두 릴레이션의 속성 값을 비교하여 조건을 만족하는 튜플만 반환
+
+- 형식 : R ⋈(r 조건 s) S
+- 조건 : {=, ≠, ≤, ≥, ＜, ＞} 중 하나
+
+#### 동등조인 (equi join)
+: 세타조인에서 **= 연산자**를 사용한 조인 - 주로 사용
+
+- 형식 : R ⋈(r = s) S
+- 질의 2-7 : 고객과 고객 주문 사항을 모두 보이시오.
+
+고객 ⋈ (고객.고객주문번호 = 주문.고객번호) 주문
+
+![image](https://user-images.githubusercontent.com/62230430/112300914-bb6b5780-8cdc-11eb-8209-31a046576ad9.png)
+
+- MySQL
+
+```mysql
+SELECT * 
+from customer, orders 
+where customer.custid = orders.custid; 
+```
+
+#### 자연조인 (natural join)
+: 동등조인에서 조인에 참여한 속성의 **중복 속성 제거한 결과** 반환
+
+- 형식 : R ⋈ N(r,s) S 
+- 질의 2-8 : 고객과 고객의 주문 사항을 모두 보여주되, 같은 속성은 한 번만 표시하시오.
+
+![image](https://user-images.githubusercontent.com/62230430/112303559-c07dd600-8cdf-11eb-8c5f-5a49e1e275b3.png)
+
+- MySQL로 구현하려면 `*` 대신 속성을 모두 입력해줘야 함.
+
+<br/>
+
+### 관계대수 예제
+
+- 질의 2-11 : 마당서점의 도서 중 가격이 8,000원 이하인 도서이름과 출판사를 보이시오.
+```mysql
+SELECT bookname, publisher 
+from book 
+where price<=8000;
+```
+
+- 질의 2-12 : 마당서점의 박지성 고객의 거래 내역 중 주문번호, 이름, 가격을 보이시오.
+```mysql
+SELECT ordersid, name, saleprice 
+from orders, customer 
+where orders.custid = customers.custid and customer.name = '박지성';
+```
+
+
+
+
+
+
+
 
 
 
