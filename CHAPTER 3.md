@@ -63,15 +63,136 @@ FROM    Book;
 - 중복을 제거하고 싶으면 `DISTINCT`라는 키워드 사용
 
 ```mysql
-SELECT   DISTINCT publisher
+SELECT  DISTINCT publisher
+FROM    Book;
 ```
 
+#### WHERE 조건
+
+- WHERE 절에 조건으로 사용할 수 있는 술어
+
+![image](https://user-images.githubusercontent.com/62230430/112476689-84b54000-8db5-11eb-80b2-77e606dc634c.png)
 
 
+- 질의 3-5 : 가격이 10,000원 이상 20,000 이하인 도서를 검색하시오.
+
+```mysql
+SELECT  *
+FROM    Book
+WHERE   price BETWEEN 10000 AND 20000;
+```
+`BETWEEN` 에는 '='이 내포되어 있음.
+
+<br/>
+
+- 질의 3-6 : 출판사가 '굿스포츠' 혹은 '대한미디어'인 도서를 검색하시오.
+
+```mysql
+SELECT  *
+FROM    Book
+WHERE   pusblisher IN ('굿스포츠', '대한미디어'); // 아닌 것은 NOT IN 사용
+```
+
+<br/>
+
+- 질의 3-8 : 도서 이름에 '축구'가 포함된 출판사를 검색하시오.
+
+```mysql
+SELECT  bookname, publisher
+FROM    Book
+WHERE   bookname LIKE '%축구%' // 축구~ 에 해당하는 것밖에 없으니 '축구%'라고 해도 무방
+```
+
+<br/>
+
+- 질의 3-9 : 도서이름의 왼쪽 두 번째 위치에 ‘구’라는 문자열을 갖는 도서를 검색하시오.
+
+```mysql
+SELECT  *
+FROM    Book
+WHERE     bookname LIKE '_구%';
+```
+
+<br/>
+
+- 와일드 문자 종류
+
+![image](https://user-images.githubusercontent.com/62230430/112477369-453b2380-8db6-11eb-9d86-c8853d0e085a.png)
+
+<br/>
+
+- 질의 3-10 : 축구에 관한 도서 중 가격이 20,000원 이상인 도서를 검색하시오.
+
+```mysql
+SELECT  *
+FROM    Book
+WHERE   bookname LIKE '%축구%' AND price >= 20000;
+```
+
+#### ORDER BY
+
+- 질의 3-12 : 도서를 가격순으로 검색하고, 가격이 같으면 이름순으로 검색하시오.
+
+```mysql
+SELECT    *
+FROM      Book
+ORDER BY  price, bookname;
+```
+변수의 순서가 앞에 올 수록 우선순위가 높은 것임.
 
 
+#### 집계 함수
+
+- 질의 3-15 : 고객이 주문한 도서의 총 판매액을 구하시오.
+
+```mysql
+SELECT  SUM(saleprice)
+FROM    Orders;
+```
+
+<br/>
+
+- 의미 있는 열 이름을 출력하고 싶을 때, 속성 이름의 별칭을 지칭하는 `AS` 키워드 사용
+
+```mysql
+SELECT  SUM(salesprice) AS 총매출
+FROM    Orders;
+```
+
+<br/>
+
+- 질의 3-17 : 고객이 주문한 도서의 총 판매액, 평균값, 최저가, 최고가를 구하시오.
+
+```mysql
+SELECT  SUM(salesprice) AS Total,
+        AVG(salesprice) AS Average,
+        MIN(salesprice) AS Minimum,
+        MAX(salesprice) AS Maximum
+FROM    Orders;
+```
+
+<br/>
+
+- 질의 3-18 : 마당서점의 도서 판매 건수를 구하시오.
+
+```mysql
+SELECT  COUNT(*)
+FROM    Orders;
+```
+
+<br/>
+
+- 집계 함수의 종류
+
+![image](https://user-images.githubusercontent.com/62230430/112481493-67cf3b80-8dba-11eb-91d3-bcc048f4d7db.png)
 
 
+#### GROUP BY
 
+- 질의 3-19 : 고객별로 주문한 도서의 총 수량과 총 판매액을 구하시오.
 
-
+```mysql
+SELECT    custid, COUNT(*) AS  도서수량, SUM(salesprice) AS 총액
+FROM      Orders
+GROUP BY  custid;
+```
