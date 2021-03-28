@@ -5,6 +5,7 @@
 > - 01 | [관계 데이터 모델의 개념](#01-관계-데이터-모델의-개념)
 > - 02 | [무결성 제약조건](#02-무결성-제약조건)
 > - 03 | [관계대수](#03-관계대수)
+> - [MySQL 실습](#mysql-실습)
 
 
 ## 01. 관계 데이터 모델의 개념
@@ -285,13 +286,41 @@ from orders, customer
 where orders.custid = customers.custid and customer.name = '박지성';
 ```
 
+<br/>
 
+## MySQL 실습
 
+- Table 생성
 
+```mysql
+CREATE TABLE Book (
+  bookid      INTEGER PRIMARY KEY, # 변수명 타입 (키종류) 순
+  bookname    VARCHAR(40),
+  publisher   VARCHAR(40),
+  price       INTEGER
+);
+```
 
+- Table 삭제
 
+```mysql
+DROP TABLE Book; # Book table 삭제
+```
 
+- 삽입
 
+```mysql
+INSERT INTO Book VALUES(11, 'Olympic Champions 2', 'Person', 150000);
+
+# 10은 이미 존재하기 때문에 오류
+INSERT INTO Book VALUES(10, 'Olympic Champions 2', 'Person', 150000); 
+```
+
+- 프로젝션
+
+```mysql
+select name from customer; # name 속성을 프로젝션
+```
 
 
 
