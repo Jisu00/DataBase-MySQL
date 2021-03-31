@@ -289,3 +289,80 @@ FROM      Customer LEFT OUTER JOIN Orders
   - RIGHT JOIN : 오른쪽 테이블을 중심으로 왼쪽 테이블을 매치 (오른쪽 무조건 표시, 왼쪽은 없으면 NULL)
 
 
+<br/>
+
+#### 부속 질의
+: 조인으로 해결되지 않을 때 주로 사용
+
+- 실행 순서 : **부속 질의가 먼저 계산**됨
+
+- 질의 3-28 : 가장 비싼 도서의 이름을 보이시오.
+
+```mysql
+SELECT    bookname
+FROM      Book
+WHERE     price = ( SELECT  MAX(price) # = 대신 <을 사용하면 MAX를 제외한 나머지 값
+                    FROM    Book );
+```
+
+`=`, `<`와 같이 **비교 연산자**를 사용하는 경우, **비교하는 대상이 하나**여야 함.  
+**한 개 이상의 경우**는 `IN` 사용함 !
+
+
+- 질의 3-29 : 도서를 구매한 적이 있는 고객의 이름을 검색하시오.
+
+```mysql
+SELECT    name
+FROM      Customer
+WHERE     custid IN ( SELECT    custid
+                      FROM      Orders );
+```
+
+<br/>
+
+- 질의 3-30 : 대한미디어에서 출판한 도서를 구매한 고객의 이름을 보이시오.
+
+```mysql
+SELECT    name
+FROM      Customer
+WHERE     custid IN ( SELECT    custid
+                      FROM      Orders
+                      WHERE     bookid IN ( SELECT    bookid
+                                            FROM      Book
+                                            WHERE     publisher = "대한미디어"));
+```
+
+동등 조인과 유사하지만, 조금 더 좁은 범위를 가져올 때 보통 사용
+
+
+<br/>
+
+#### 상관 부속질의
+: 상위 부속질의의 튜플을 이용하여 하위 부속 질의 계산
+
+- 질의 3-31 : 출판사별로 출판사의 평균 도서 가격보다 비싼 도서를 구하시오.
+
+```mysql
+SELECT    b1.bookname
+FROM      Book b1
+WHERE     b1.price > ( SELECT   avg(b2.price)
+                       FROM     Book b2
+                       WHERE    b2.publisher = b1.publisher );
+```
+
+
+#### 집합 연산
+
+- 주의 사항 : 양 쪽의 속성과 도메인이 같아야 함 !
+
+- 질의 3-32 : 대한민국에서 거주하는 고객의 이름과 도서를 주문한 고객의 이름을 보이시오.
+
+```mysql
+SELECT    name
+FROM      Customer
+WHERE     address LIKE '대한민국%'
+UNION
+SELECT    name
+FROM      Customer
+WHERE     custid IN (SELECT custid FROM Orders);
+```
