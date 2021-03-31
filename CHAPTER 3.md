@@ -196,3 +196,96 @@ SELECT    custid, COUNT(*) AS  도서수량, SUM(salesprice) AS 총액
 FROM      Orders
 GROUP BY  custid;
 ```
+
+<br/>
+
+- 질의 3-20 : 가격이 8,000원 이상인 도서를 구매한 고객에 대하여 고객별 주문 도서의 총 수량을 구하시오. 단, 두 권 이상 구매한 고객만 구한다.
+
+```mysql
+SELECT    custid, COUNT(*) AS 도서 수량
+FROM      Orders
+WHERE     saleprice >= 8000
+GROUP BY  custid
+HAVING    count(*) >= 2;
+```
+
+<br/>
+
+#### `GROUP BY`와 `HAVING` 절의 문법과 주의사항
+
+- `GROUP BY` <속성>
+  - `GROUP BY`로 튜플을 그룹으로 묶은 후에는 `SELECT` 절에는 `GROUP BY`에서 사용한 <속성>과 집계함수만 가능 (최신 버전에선 다른 속성도 사용 가능하지만, 묶음의 첫번째 요소만 나타남)
+  - 예시
+    ```mysql
+    SELECT    custid, SUM(saleprice) # GROUP BY의 속성과 동일하게
+    FROM      Orders
+    GROUP BY  custid;
+    ```
+
+- `HAVING` <검색조건>
+  - `GROUP BY` 절과 함께 작성해야 함.
+  - `WHERE` 절보다 뒤에 와야 함.
+
+<br/>
+
+### 두 개 이상 테이블에서 SQL 질의
+
+#### 동등 조인
+ 
+- 질의 3-22 : 고객과 고객의 주문에 관한 데이터를 고객번호 순으로 정렬하여 보이시오. (동등 조인)
+
+```mysql
+
+SELECT    *
+FROM      Customer, Orders
+WHERE     Customer.custid = Orders.custid
+ORDER BY  Customer.custid;
+```
+
+<br/>
+
+- 질의 3-24 : 고객별로 주문한 모든 도서의 총 판매액을 구하고, 고객별로 정렬하시오.
+
+```mysql
+SELECT    name, sum(saleprice)
+FROM      Customer, Orders
+WHERE     Customer.custid = Orders.custid
+GROUP BY  Customer.name // 최신 버전에서는 Cutomer.custid 로도 같은 결과값 나옴
+ORDER BY  Customer.name;
+```
+
+<br/>
+
+- 마당서점 데이터 간의 연결
+
+![image](https://user-images.githubusercontent.com/62230430/113091155-50fb6f80-9226-11eb-89e5-95ce9cce0fc9.png)
+
+
+- 질의 3-25 : 고객의 이름과 고객이 주문한 도서의 이름을 구하시오.
+
+```mysql
+SELECT    Customer.name, Book.bookname
+FROM      Customer, Orders, Book
+WHERE     Customer.custid = Orders.custid AND Orders.bookid = Book.bookid; #연결
+```
+
+#### 외부 조인
+
+- 질의 3-27 : 도서를 구매하지 않은 고객을 포함하여 고객의 이름과 고객이 주문한 도서의 판매가격을 구하시오.
+
+```mysql
+SELECT    Customer.name, saleprice
+FROM      Customer LEFT OUTER JOIN Orders
+          ON Customer.custid = Orders.custid;
+```
+
+<br/>
+
+- 조인 문법
+
+![image](https://user-images.githubusercontent.com/62230430/113092356-cbc58a00-9228-11eb-8ac1-9768911692d6.png)
+
+  - LEFT JOIN : 왼쪽 테이블을 중심으로 오른쪽 테이블을 매치 (왼쪽 무조건 표시, 오른쪽은 없으면 NULL)
+  - RIGHT JOIN : 오른쪽 테이블을 중심으로 왼쪽 테이블을 매치 (오른쪽 무조건 표시, 왼쪽은 없으면 NULL)
+
+
