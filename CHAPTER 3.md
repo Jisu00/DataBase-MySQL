@@ -366,3 +366,95 @@ SELECT    name
 FROM      Customer
 WHERE     custid IN (SELECT custid FROM Orders);
 ```
+
+<br/>
+
+MySQL에는 MINUS, INTERSECT 연산자가 존재하지 않음.
+
+- MINUS : `NOT IN` 사용
+  - 질의 3-32에서 MINUS 연산을 수행한 "대한민국에서 거주하는 고객의 이름에서 도서를 주문한 고객의 이름을 빼고 보이시오." (NOT IN 사용)
+  ```mysql
+  SELECT    name
+  FROM      Customer
+  WHERE     address LIKE '대한민국%' AND
+            name NOT IN ( SELECT  name
+                          FROM    Customer
+                          WHERE   custid IN ( SELECT custid FROM Orders));
+  ```
+- INTERSECT : `IN` 사용
+  - 질의 3-32에서 INTERSECT 연산을 수행한 "대한민국에서 거주하는 고객 중 도서를 주문한 고객의 이름을 보이시오" (IN 사용)
+  
+  ```mysql
+  SELECT    name
+  FROM      Customer
+  WHERE     address LIKE '대한민국%' AND
+            name IN ( SELECT  name
+                      FROM    Customer
+                      WHERE   custid IN ( SELECT custid FROM Orders));
+  ```
+
+<br/>
+
+### EXISTS
+
+- `EXISTS` : 부속 질의문에서 조건에 맞는 튜플이 존재하면 결과로 포함.
+- `NOT EXISTS` : 부속 질의문의 모든 행이 조건에 만족하지 않을 때에만 참.
+
+- 질의 3-33 : 주문이 있는 고객의 이름과 주소를 보이시오.
+
+```mysql
+SELECT 	name, address
+FROM 	Customer cs
+WHERE 	EXISTS (SELECT *
+	              FROM  Orders od
+	              WHERE cs.custid =od.custid);
+```
+
+<br/>
+
+## 04. 데이터 정의어
+
+### CREATE 문
+: 테이블 구성, 속성과 속성에 관한 제약 정의, 기본키 및 외래키를 정의하는 명령
+
+- `PRIMARY KEY` : 기본키를 정할 때 사용
+- `FOREIGN KEY` : 외래키를 지정할 때 사용
+- `ON UPDATE` : 외래키 속성의 수정 시 동작
+- `ON DELETE` : 외래키 속성의 삭제 시 동작
+
+- 질의 3-34 :  다음과 같은 속성을 가진 NewBook 테이블을 생성하시오. 정수형은 INTEGER를 사용하며 문자형은 가변형 문자타입인 VARCHAR을 사용한다. 
+  - bookid(도서번호)-INTEGER
+  - bookname(도서이름)-VARCHAR(20)
+  - publisher(출판사)-VARCHAR(20)
+  - price(가격)-INTEGER
+
+```mysql
+CREATE TABLE  NewBook (
+  bookid    INTEGER, # INTEGER  PRIMARY KEY -> 기본키 설정 방법 1
+  bookname  VARCHAR(20),
+  publisher VARCHAR(20),
+  price     INTEGER
+  
+  # PRIMARY KEY (bookid) -> 기본키 설정 방법 2
+  # PRIMARY KEY (bookname, publisher) -> 기본키 여러개 설정 방법
+);
+```
+
+<br/>
+
+- 데이터 타입 종류
+
+![image](https://user-images.githubusercontent.com/62230430/114012350-2e5dfc00-98a1-11eb-9bc3-b894711f64fc.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
