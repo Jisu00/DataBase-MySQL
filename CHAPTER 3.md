@@ -422,6 +422,14 @@ WHERE 	EXISTS (SELECT *
 - `ON UPDATE` : 외래키 속성의 수정 시 동작
 - `ON DELETE` : 외래키 속성의 삭제 시 동작
 
+<br/>
+
+- CREATE 문의 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/114186819-43f72280-9982-11eb-9763-924ccb2c7902.png)
+
+<br/>
+
 - 질의 3-34 :  다음과 같은 속성을 가진 NewBook 테이블을 생성하시오. 정수형은 INTEGER를 사용하며 문자형은 가변형 문자타입인 VARCHAR을 사용한다. 
   - bookid(도서번호)-INTEGER
   - bookname(도서이름)-VARCHAR(20)
@@ -440,6 +448,8 @@ CREATE TABLE  NewBook (
 );
 ```
 
+
+
 <br/>
 
 - 데이터 타입 종류
@@ -448,13 +458,112 @@ CREATE TABLE  NewBook (
 
 
 
+<br/>
+
+### ALTER 문
+
+: 생성된 테이블의 속성과 속성에 관한 제약 변경, 기본키 및 외래키 변경
+
+- `ADD` : 속성 추가
+- `DROP` : 속성 제거
+- `MODIFY`: 속성의 기본값 설정 or 삭제
+
+<br/>
+
+- ALTER 문의 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/114186923-5ec99700-9982-11eb-8961-19c13101f54a.png)
 
 
+<br/>
+
+### DROP 문
+
+: 테이블 삭제 ( 구조와 데이터 모두 삭제하므로 주의 )
+
+- DROP 문의 기본 문법
+
+```mysql
+DROP TABLE	테이블 이름;
+```
+
+<br/>
+
+## 05. 데이터 조작어 - 삽입, 수정, 삭제
+
+### INSERT 문
+: 테이블에 새로 튜플을 삽입하는 명령
+
+- INSERT 문의 기본 문법
+![image](https://user-images.githubusercontent.com/62230430/114187637-2e362d00-9983-11eb-95aa-c40236b030d2.png)
+
+<br/>
+
+- 질의 3-44 :  Book 테이블에 새로운 도서 ‘스포츠 의학’을 삽입하시오. 스포츠 의학은 한솔의학서적에서 출간했으며 가격은 90,000원이다.
+
+```mysql
+INSERT INTO Book(bookid, bookname, publisher, price)
+	VALUES (11, '스포츠 의학', '한솔의학서적', 9000);
+```
+
+<br/>
+
+- 질의 3-55 : Book 테이블에 새로운 도서 ‘스포츠 의학’을 삽입하시오. 스포츠 의학은 한솔의학서적에서 출간했으며 가격은 미정이다.
+
+```mysql
+INSERT INTO Book(bookid, bookname, publisher)
+	VALUES (14, '스포츠 의학', '한솔의학서적');
+```
+
+<br/>
+
+- 대량 삽입 : 한꺼번에 여러 개의 튜플을 삽입하는 방법
+- 질의 3-46 : 수입도서 목록(Imported_book)을 Book 테이블에 모두 삽입하시오. (Imported_book 테이블은 스크립트 Book 테이블과 같이 이미 만들어져 있음) 
+
+```mysql
+INSERT   INTO Book(bookid, bookname, price, publisher)
+	SELECT bookid, bookname, price, publisher
+	FROM  Imported_book;
+```
+
+<br/>
+
+### UPDATE 문
+: 특정 속성 값을 수정하는 명령
+
+- UPDATE 문의 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/114190306-20ce7200-9986-11eb-9ec3-15e3a0200f20.png)
+
+<br/>
+
+- 질의 3-47 : Customer 테이블에서 고객번호가 5인 고객의 주소를 ‘대한민국 부산’으로 변경하시오.
+
+```mysql
+UPDATE	Customer
+SET	address = "대한민국 부산"
+WHERE	custid = 5;
+```
+
+<br/>
+
+- 질의 3-48 : Book 테이블에서 14번 ‘스포츠 의학’의 출판사를 imported_book 테이블의 21번 책의 출판사와 동일하게 변경하시오.
+
+```mysql
+UPDATE	Book
+SET	publisher = (SELECT publisher
+			FROM	imported_book
+			WHERE	bookid = '21')
+WHERE	bookid = '14';
+```
 
 
+<br/>
 
+### DELETE 문
+: 테이블에 있는 기존 튜플을 삭제하는 명령
 
+- DELETE 문의 기본 문법
 
-
-
+![image](https://user-images.githubusercontent.com/62230430/114194012-072f2980-998a-11eb-84fb-6f6b9639d94b.png)
 
