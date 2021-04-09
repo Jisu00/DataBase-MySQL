@@ -495,6 +495,7 @@ DROP TABLE	테이블 이름;
 : 테이블에 새로 튜플을 삽입하는 명령
 
 - INSERT 문의 기본 문법
+
 ![image](https://user-images.githubusercontent.com/62230430/114187637-2e362d00-9983-11eb-95aa-c40236b030d2.png)
 
 <br/>
@@ -517,7 +518,9 @@ INSERT INTO Book(bookid, bookname, publisher)
 
 <br/>
 
-- 대량 삽입 : 한꺼번에 여러 개의 튜플을 삽입하는 방법
+### 대량 삽입
+: 한꺼번에 여러 개의 튜플을 삽입하는 방법
+
 - 질의 3-46 : 수입도서 목록(Imported_book)을 Book 테이블에 모두 삽입하시오. (Imported_book 테이블은 스크립트 Book 테이블과 같이 이미 만들어져 있음) 
 
 ```mysql
