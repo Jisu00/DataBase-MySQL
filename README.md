@@ -12,9 +12,9 @@ MySQL로 배우는 데이터베이스 개론과 실습
 >
 > * [CHAPTER 2](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%202.md) | 관계 데이터 모델
 >
-> * CHAPTER 3 | SQL 기초
+> * [CHAPTER 3](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%203.md) | SQL 기초
 >
-> * CHAPTER 4 | SQL 고급
+> * [CHAPTER 4](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%204.md) | SQL 고급
 >
 > * CHAPTER 5 | 데이터베이스 프로그래밍
 >
