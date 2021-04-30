@@ -245,4 +245,248 @@ WHERE 	  EXISTS (SELECT   *
                   WHERE   address LIKE '%대한민국%' AND cs.custid=od.custid);
 ```
 
+<br/>
+
+## 03. 뷰
+
+### 뷰
+: 하나 이상의 테이블을 합하여 만든 가상의 테이블 (스키마만 가짐)
+
+#### 뷰의 장점
+
+- **편리성 및 재사용성** : 자주 사용되는 복잡한 질의를 뷰로 미리 정의할 수 있음.
+- **보안성** : 사용자별 필요한 데이터만 선별하여 보여줄 수 있음. 중요한 질의의 경우 **암호화** 가능
+- **독립성** : 미리 정의된 뷰를 일반 테이블처럼 사용 가능하기 때문에 편리, 사용자가 필요한 정보만 요구에 맞게 가공 가능
+
+<br/>
+
+#### 뷰의 특징
+
+- 원본 데이터 값에 따라 같이 변함
+- 독립적인 인덱스 생성 어려움
+- 삽입, 삭제, 갱신 연산에 많은 제약이 따름
+
+<br/>
+
+### 뷰의 생성
+
+- 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116661308-33f5c000-a9cf-11eb-8fe4-268f24258e59.png)
+
+<br/>
+
+- 질의 4-20 : 주소에 '대한민국'을 포함하는 고객들로 구성된 뷰를 만들고 조회하시오. 뷰의 이름은 vw_Customer로 설정하시오.
+
+```mysql
+CREATE VIEW    vw_Customer
+AS SELECT      *
+   FROM        Customer
+   WHERE       address LIKE '%대한민국%';
+```
+
+<br/>
+
+- 질의 4-21 : Orders 테이블에 고객이름과 도서이름을 바로 확인할 수 있는 뷰를 생성한 후, ‘김연아’ 고객이 구입한 도서의 주문번호, 도서이름, 주문액을 보이시오.
+
+```mysql
+CREATE VIEW	vw_Orders (orderid, custid, name, bookid, bookname, saleprice, orderdate)
+AS SELECT	od.orderid, od.custid, cs.name,
+	        od.bookid, bk.bookname, od.saleprice, od.orderdate
+   FROM       	Orders od, Customer cs, Book bk
+   WHERE     	od.custid =cs.custid AND od.bookid =bk.bookid;
+```
+
+<br/>
+
+### 뷰의 수정
+
+- 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116661730-e2016a00-a9cf-11eb-992e-cd860bc36476.png)
+
+<br/>
+
+- 질의 4-22 : [질의 4-20]에서 생성한 뷰 vw_Customer는 주소가 대한민국인 고객을 보여준다. 이 뷰를 영국을 주소로 가진 고객으로 변경하시오. phone 속성은 필요 없으므로 포함시키지 마시오.
+
+```mysql
+CREATE OF REPLACE VIEW 	vs_Customer (custid, name, address)
+AS SELECT		custid, name, address
+   FROM			Customer
+   WHERE		address LIKE '%영국%';
+```
+
+<br/>
+
+결과 확인
+
+```mysql
+SELECT	*
+FROM	vw_Customer;
+```
+
+<br/>
+
+### 뷰의 삭제
+
+- 기본 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116662015-33115e00-a9d0-11eb-9fa8-c604315f842a.png)
+
+<br/>
+
+- 질의 4-23 : 앞서 생성한 뷰 vw_Customer를 삭제하시오.
+
+```mysql
+DROP VIEW	vw_Customer;
+```
+
+<br/>
+
+결과 확인
+
+```mysql
+SELECT	*
+FROM	vw_Customer;
+```
+
+<br/>
+
+## 04. 인덱스
+
+#### 데이터베이스의 물리적 저장
+
+![image](https://user-images.githubusercontent.com/62230430/116662475-c6e32a00-a9d0-11eb-96d8-ffe5f0e57851.png)
+
+
+<br/>
+
+### 인덱스와 B-tree
+
+- 인덱스(index, 색인) : 데이터를 쉽고 빠르게 찾을 수 있도록 만든 구조 (주로 B-tree 사용)
+
+#### B-tree의 구조
+
+![image](https://user-images.githubusercontent.com/62230430/116662603-f1cd7e00-a9d0-11eb-9504-131f63b8575b.png)
+
+
+<br/>
+
+#### 인덱스의 특징
+
+- 테이블에서 한 개 이상의 속성을 이용하여 생성
+- **빠른 검색**과 함께 효율적인 레코드 접근이 가능
+- 순서대로 정렬된 속성과 데이터의 위치만 보유 -> **작은 공간 차지**
+- 저장된 값들은 테이블의 부분 집합
+- 일반적으로 **B-tree** 형태의 구조 가짐
+- 데이터의 수정, 삭제 등의 변경이 발생하면 인덱스 재구성이 필요
+
+<br/>
+
+### MySQL 인덱스
+
+#### 클러스터 인덱스
+
+![image](https://user-images.githubusercontent.com/62230430/116662905-58529c00-a9d1-11eb-842d-1c0d512c745d.png)
+
+
+<br/>
+
+#### MySQL 인덱스 B-tree
+
+![image](https://user-images.githubusercontent.com/62230430/116662960-6c969900-a9d1-11eb-9584-108cc2a5c4c1.png)
+
+<br/>
+
+#### MySQL 인덱스의 종류
+
+![image](https://user-images.githubusercontent.com/62230430/116663009-7c15e200-a9d1-11eb-90b2-a30d59bb6fd0.png)
+
+<br/>
+
+### 인덱스의 생성
+
+#### 인덱스 생성 시 고려사항
+
+- 인덱스는 WHERE 절에 자주 사용되는 속성이어야 함.
+- 인덱스는 조인에 자주 사용되는 속성이어야 함.
+- 단일 테이블에 인덱스가 많으면 속도가 느려질 수 있음.
+- 속성이 가공되는 경우 사용하지 않음.
+- 속성의 선택도가 낮을 때 유리함. (속성의 모든 값이 다른 경우)
+
+<br/>
+
+#### 인덱스의 생성 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116663244-ca2ae580-a9d1-11eb-9e38-dea8c0682c3c.png)
+
+<br/>
+
+- 질의 4-24 : Book 테이블의 bookname 열을 대상으로 비 클러스터 인덱스 ix_Book을 생성하라.
+
+```mysql
+CREATE INDEX ix_Book ON Book(bookname);
+```
+
+<br/>
+
+- 질의 4-25 : Book 테이블의 publisher, price 열을 대상으로 인덱스 ix_Book2 생성하시오.
+
+```mysql
+CREATE INDEX ix_Book2 ON Book(publisher, price);
+```
+
+<br/>
+
+### 인덱스의 재구성과 삭제
+
+#### 인덱스 재구성
+
+- 생성 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116663542-33aaf400-a9d2-11eb-8a65-6054812cb3da.png)
+
+
+<br/>
+
+- 질의 4-26 : Book 테이블의 인덱스를 최적화하시오.
+
+```mysql
+ALTER TABLE	Book;
+```
+
+<br/>
+
+#### 인덱스의 삭제
+
+- 삭제 문법
+
+![image](https://user-images.githubusercontent.com/62230430/116663611-4fae9580-a9d2-11eb-8def-9ed0179a4223.png)
+
+<br/>
+
+- 질의 4-27 : 인덱스 ix_Book을 삭제하시오.
+
+```mysql
+DROP INDEX ix_Book ON Bppk;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
