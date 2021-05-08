@@ -16,9 +16,9 @@ MySQL로 배우는 데이터베이스 개론과 실습
 >
 > * [CHAPTER 4](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%204.md) | SQL 고급
 >
-> * CHAPTER 5 | 데이터베이스 프로그래밍
+> * [CHAPTER 5](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%205.md) | 데이터베이스 프로그래밍
 >
-> * CHAPTER 6 | 데이터 모델링
+> * [CHAPTER 6](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%206.md) | 데이터 모델링
 > 
 > * CHAPTER 7 | 정규화
 > 
