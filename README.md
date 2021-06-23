@@ -20,6 +20,6 @@ MySQL로 배우는 데이터베이스 개론과 실습
 >
 > * [CHAPTER 6](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%206.md) | 데이터 모델링
 > 
-> * CHAPTER 7 | 정규화
+> * [CHAPTER 7](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%207.md) | 정규화
 > 
 > * CHAPTER 8 | 트랜잭션, 동시성 제어, 회복
