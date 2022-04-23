@@ -1,11 +1,5 @@
 # DataBase
 
-3학년 1학기에 수강한 '데이터베이스' 과목 정리
-
-## 교재
-
-MySQL로 배우는 데이터베이스 개론과 실습
-
 ## 목차
 
 > * [CHAPTER 1](https://github.com/Jisu00/DataBase/blob/main/CHAPTER%201.md) | 데이터베이스 시스템
