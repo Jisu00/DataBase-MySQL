@@ -189,6 +189,8 @@ Where  price >= 10000;
 
 ### DBMS
 
+: DataBase Management System
+
 #### DBMS의 기능
 
 ![DBMS의 기능](https://user-images.githubusercontent.com/62230430/110734656-9e11a480-826b-11eb-9aef-e54cb4051912.png)
